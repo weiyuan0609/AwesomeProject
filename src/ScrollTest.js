@@ -4,10 +4,18 @@ import {
     Image, 
     Text, 
     StyleSheet, 
-    ToastAndroid
+    ToastAndroid,
+    RefreshControl
 } from 'react-native';
 
 export default class ScrollViewTest extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isRefreshing: false
+        }
+    }
+
     //ScrollView使用比较简单和Android中的ScrollView比较类似，
     // 当放入其中的组件高度大于屏幕时就会开始滚动
 
@@ -18,6 +26,10 @@ export default class ScrollViewTest extends Component {
 
     _onEndReached() {
         ToastAndroid.show("到达底部了", ToastAndroid.SHORT);
+    }
+
+    _onRefresh() {  
+        this.setState({isRefreshing: true}); 
     }
 
     render() {
@@ -32,6 +44,14 @@ export default class ScrollViewTest extends Component {
                 onScroll={this._onScroll}
                 removeClippedSubviews={true}//实验特性，可以优化滚动性能
                 showsVerticalScrollIndicator={false}//是否显示垂直滚动条
+                refreshControl={  // 上拉刷新
+                    <RefreshControl  
+                        refreshing={this.state.isRefreshing} 
+                        onRefresh={() => this._onRefresh}
+                        colors={['#ff0000', '#00ff00','#0000ff','#3ad564']}  
+                        progressBackgroundColor="#ffffff"  
+                    />  
+                } 
             >
                 <Text style={ScrollViewTestStyle.scroll_item}>我是可以滚动的ScrollView</Text>
                 <Text style={ScrollViewTestStyle.scroll_item}>我是可以滚动的ScrollView</Text>
